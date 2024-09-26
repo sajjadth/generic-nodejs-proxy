@@ -17,7 +17,11 @@ app.use(
       "^/": "/", // Rewrite the path (if needed)
     },
     onProxyReq: (proxyReq, req, res) => {
-      console.log(`Proxying request to: ${targetUrl}${req.url}`);
+      console.log(
+        `Proxying request to: ${targetUrl}${req.url} (Method: ${
+          req.method
+        }, Headers: ${JSON.stringify(req.headers)})`
+      );
     },
   })
 );
