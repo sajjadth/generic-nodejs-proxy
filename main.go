@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -10,26 +9,32 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 )
 
 func main() {
+	// Initialize Zap logger
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+
+	// Load .env file if not running in Railway environment
 	if _, exists := os.LookupEnv("RAILWAY_ENVIRONMENT"); !exists {
 		if err := godotenv.Load(filepath.Join("./", ".env")); err != nil {
-			log.Fatal("Error loading .env file")
+			logger.Fatal("Error loading .env file", zap.Error(err))
 			os.Exit(1)
 		}
 	}
 
-	// Get the target URL from environment variable
+	// Get the target URL from the environment variable
 	target := os.Getenv("TARGET_URL")
 	if target == "" {
-		log.Fatal("TARGET_URL is not set in the environment")
+		logger.Fatal("TARGET_URL is not set in the environment")
 	}
 
 	// Parse the target URL
 	url, err := url.Parse(target)
 	if err != nil {
-		log.Fatalf("Invalid target URL: %v", err)
+		logger.Fatal("Invalid target URL", zap.String("url", target), zap.Error(err))
 	}
 
 	// Create a reverse proxy
@@ -55,7 +60,11 @@ func main() {
 
 	// Proxy handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Proxying request: %s %s", r.Method, r.URL.String())
+		logger.Info("Proxying request",
+			zap.String("method", r.Method),
+			zap.String("url", r.URL.String()),
+			zap.String("remote_addr", r.RemoteAddr),
+		)
 		proxy.ServeHTTP(w, r)
 	})
 
@@ -64,6 +73,6 @@ func main() {
 	if port == "" {
 		port = "8080" // Default to port 8080 if not specified
 	}
-	log.Printf("Proxy server is running on port %s, forwarding to %s", port, target)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	logger.Info("Proxy server is running", zap.String("port", port), zap.String("target_url", target))
+	logger.Fatal("Server failed", zap.Error(http.ListenAndServe(":"+port, nil)))
 }
