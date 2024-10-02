@@ -6,16 +6,18 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Load environment variables from .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if _, exists := os.LookupEnv("RAILWAY_ENVIRONMENT"); !exists {
+		if err := godotenv.Load(filepath.Join("./", ".env")); err != nil {
+			log.Fatal("Error loading .env file")
+			os.Exit(1)
+		}
 	}
 
 	// Get the target URL from environment variable
