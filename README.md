@@ -3,6 +3,7 @@
 This project is a simple proxy server built with Node.js, Express, and `http-proxy-middleware`. It forwards incoming HTTP requests to a target URL, allowing you to access third-party APIs via the proxy.
 
 ## Features
+
 - Forwards all incoming requests to the specified target URL
 - Preserves query parameters and request payloads
 - Configurable via environment variables
@@ -16,6 +17,7 @@ This project is a simple proxy server built with Node.js, Express, and `http-pro
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/sajjadth/generic-nodejs-proxy.git
    cd generic-nodejs-proxy
@@ -43,11 +45,15 @@ This project is a simple proxy server built with Node.js, Express, and `http-pro
 ## Usage
 
 ### Run Locally
+
 Start the server using:
+
 ```bash
 npm start
 ```
+
 Or with Yarn:
+
 ```bash
 yarn start
 ```
@@ -59,17 +65,23 @@ You can host this proxy server on any platform that supports Node.js, such as a 
 ## Examples
 
 ### Forwarding a GET Request
+
 If you make a request to your proxy URL:
+
 ```
 GET http://localhost:3000/api/users?name=John
 ```
+
 The proxy will forward it to:
+
 ```
 GET https://your-target-api.com/api/users?name=John
 ```
 
 ### Forwarding a POST Request with Payload
+
 Request to Proxy:
+
 ```
 POST http://localhost:3000/api/users
 Content-Type: application/json
@@ -79,7 +91,9 @@ Content-Type: application/json
   "email": "john@example.com"
 }
 ```
+
 The proxy forwards it to:
+
 ```
 POST https://your-target-api.com/api/users
 Content-Type: application/json
@@ -90,9 +104,16 @@ Content-Type: application/json
 }
 ```
 
+## Migration from Node.js to Go
+
+This project was initially developed in Node.js and has since been migrated to Go for improved performance and lower memory usage.
+
+If you're interested in the Node.js version, you can check out the `v1.0-node` tag.
+
 ## Customization
 
 You can modify `index.js` to add custom logic, such as:
+
 - Changing request headers
 - Adding authentication
 - Logging requests
