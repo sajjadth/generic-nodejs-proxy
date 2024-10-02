@@ -1,6 +1,6 @@
-# Generic Node.js Proxy
+# Generic Proxy
 
-This project is a simple proxy server built with Node.js, Express, and `http-proxy-middleware`. It forwards incoming HTTP requests to a target URL, allowing you to access third-party APIs via the proxy.
+This project is a simple proxy server, initially built with Node.js and now migrated to Go for improved performance and lower memory usage. It forwards incoming HTTP requests to a target URL, allowing you to access third-party APIs via the proxy.
 
 ## Features
 
@@ -11,56 +11,37 @@ This project is a simple proxy server built with Node.js, Express, and `http-pro
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v14+ recommended)
-- [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
-
-## Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/sajjadth/generic-nodejs-proxy.git
-   cd generic-nodejs-proxy
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-   Or, if you prefer using yarn:
-   ```bash
-   yarn install
-   ```
+- [Go](https://golang.org/) (v1.22+ recommended)
 
 ## Configuration
 
-1. Create a `.env` file in the project root directory and add the target URL:
-   ```
-   TARGET_URL=https://your-target-api.com
-   PORT=3000
-   ```
-   - Replace `https://your-target-api.com` with the URL you want to forward requests to.
-   - Set `PORT` to the desired port number (default is 3000).
+1.Create a .env file in the project root directory and add the target URL:
 
-## Usage
-
-### Run Locally
-
-Start the server using:
-
-```bash
-npm start
+```
+TARGET_URL=https://your-target-api.com
+PORT=3000
 ```
 
-Or with Yarn:
+- Replace `https://your-target-api.com` with the URL you want to forward requests to.
+- Set `PORT` to the desired port number (default is 3000).
 
-```bash
-yarn start
-```
+## Setup Instructions
 
-The proxy server will run on `http://localhost:3000` by default and will forward all requests to your `TARGET_URL`.
-
-You can host this proxy server on any platform that supports Node.js, such as a VPS, cloud service, or container orchestration platform like Docker or Kubernetes.
+1. Clone the repository:
+   ```
+   git clone <repository_url>
+   cd <repository_directory>
+   ```
+2. Create a .env file:
+   - Copy the provided environment variables template and add your specific values.
+3. Install dependencies:
+   ```
+   go mod tidy
+   ```
+4. Run the application:
+   ```
+   go run main.go
+   ```
 
 ## Examples
 
@@ -112,7 +93,7 @@ If you're interested in the Node.js version, you can check out the `v1.0-node` t
 
 ## Customization
 
-You can modify `index.js` to add custom logic, such as:
+You can modify `main.go` to add custom logic, such as:
 
 - Changing request headers
 - Adding authentication
